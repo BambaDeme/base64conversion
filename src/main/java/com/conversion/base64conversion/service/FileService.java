@@ -95,4 +95,16 @@ public class FileService {
         return baos.toByteArray();
 
     }
+
+    public byte[] resizeImage(File sourceFile) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(sourceFile); // read the image
+        // resize image with default defined size imageSize
+        BufferedImage outputImage = Scalr.resize(bufferedImage,Scalr.Method.QUALITY ,imageSize);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        ImageIO.write(outputImage, "jpg", baos);
+
+        return baos.toByteArray();
+    }
 }

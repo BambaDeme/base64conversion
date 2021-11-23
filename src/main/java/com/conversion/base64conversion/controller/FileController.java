@@ -4,6 +4,8 @@ import com.conversion.base64conversion.service.FileService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +28,7 @@ public class FileController {
         return "hello world !!!";
     }
 
+    // convert and resize base64 image
     @PostMapping(value = "/convert/img",produces={IMAGE_PNG_VALUE,IMAGE_JPEG_VALUE})
     public byte[] convertImage(@RequestBody String base64File) throws IOException {
         return fileService.convertImage(base64File);
@@ -36,9 +39,17 @@ public class FileController {
         //return Files.readAllBytes(Paths.get("converted."+extension));
 
     }
+
+    //convert and resize base64 pdf
     @PostMapping(value = "/convert/pdf",produces={"application/pdf"})
     public byte[] convertPdf(@RequestBody String base64File) throws IOException {
         return fileService.convertPdf(base64File);
+    }
+
+    @PostMapping(value="/uploadImage",produces={IMAGE_PNG_VALUE,IMAGE_JPEG_VALUE})
+    public byte[] uploadImage(@RequestParam("image") MultipartFile imageFile,RedirectAttributes redirectAttributes) throws IOException {
+        return fileService.resizeImage(imageFile.getBytes());
+        //return null;
     }
 
 }
